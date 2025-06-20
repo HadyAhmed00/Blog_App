@@ -9,22 +9,35 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignupUsecase _signupUsecase;
+  final SigninUsecase _signinUsecase;
 
-  AuthBloc({required SignupUsecase signupUsecase})
-    : _signupUsecase = signupUsecase,
-      super(AuthInitial()) {
-    on<AuthSignUp>((event, emit) async {
-      emit(AuthLoading());
-      final res = await _signupUsecase(
-        SignupPrams(
-          name: event.name,
-          email: event.email,
-          password: event.password,
-        ),
-      );
-      res.fold((l) => emit(AuthFailed(l.massage)),
-               (r) => emit(AuthSuccess(r))
-      );
-    });
+  AuthBloc({
+    required SignupUsecase signupUsecase,
+    required SigninUsecase signinUsecase,
+  }) : _signupUsecase = signupUsecase,
+       _signinUsecase = signinUsecase,
+       super(AuthInitial()) {
+    on<AuthSignUp>(_authSignUp);
+    on<AuthSignIn>(_authSignIn);
   }
+
+  void _authSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final res = await _signupUsecase(
+      SignupPrams(
+        name: event.name,
+        email: event.email,
+        password: event.password,
+      ),
+    );
+    res.fold((l) => emit(AuthFailed(l.massage)), (r) => emit(AuthSuccess(r)));
+  }
+  void _authSignIn(AuthSignIn event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final res = await _signinUsecase(
+      SigninPrams(email: event.email, password: event.password)
+    );
+    res.fold((l) => emit(AuthFailed(l.massage)), (r) => emit(AuthSuccess(r)));
+  }
+
 }

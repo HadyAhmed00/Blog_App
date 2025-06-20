@@ -29,6 +29,12 @@ void _authInit() {
   );
 
   serviceLocator.registerFactory(() => SignupUsecase(serviceLocator()));
+  serviceLocator.registerFactory(() => SigninUsecase(serviceLocator()));
 
-  serviceLocator.registerLazySingleton(() => AuthBloc(signupUsecase: serviceLocator()),);
+  serviceLocator.registerLazySingleton(
+    () => AuthBloc(
+      signupUsecase: serviceLocator(),
+      signinUsecase: serviceLocator(),
+    ),
+  );
 }
