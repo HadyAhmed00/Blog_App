@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:blog/core/common/cubits/user_login/user_login_cubit.dart';
 import 'package:blog/core/theme/route.dart';
 import 'package:blog/core/theme/theme.dart';
 import 'package:blog/features/auth/ui/bloc/auth_bloc.dart';
@@ -11,14 +14,28 @@ void main() async {
   await initDependencies();
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => serviceLocator<AuthBloc>())],
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+        BlocProvider(create: (_) => serviceLocator<UserLoginCubit>()),
+      ],
       child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +43,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Blog App',
       theme: AppTheme.darkTheme,
-      home: const SigninPage(),
+      home: BlocSelector<UserLoginCubit, UserLoginState, bool>(
+        selector: (state) {
+          return state is UserIsLoggedIn;
+        },
+        builder: (context, isLoggedIn) {
+          if (isLoggedIn) {
+            return Scaffold(body: Center(child: Text("HomePage")));
+          } else {
+            return SigninPage();
+          }
+        },
+      ),
       routes: AppRout.appRoutes(context),
     );
   }

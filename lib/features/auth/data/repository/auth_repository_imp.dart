@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:blog/core/error/exceptions.dart';
 import 'package:blog/core/error/failurs.dart';
 import 'package:blog/features/auth/data/data_source/remote_data_sorce.dart';
-import 'package:blog/features/auth/domain/entities/user_entitie.dart';
+import 'package:blog/core/entities/user_entitie.dart';
 import 'package:blog/features/auth/domain/repository/repository.dart';
 import 'package:fpdart/src/either.dart';
 
@@ -44,5 +44,19 @@ class AuthRepositoryImpl implements DomainAuthRepo {
     }on ServerException catch (e) {
       return left(Failure(e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    try{
+      final user = await dataSource.getCurrentUser();
+      if(user == null){
+        return left(Failure("User Not Logged In"));
+      }
+      return right(user);
+    } catch (e){
+      throw ServerException(e.toString());
+    }
+
   }
 }

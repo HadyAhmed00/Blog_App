@@ -1,4 +1,4 @@
-import 'package:blog/features/auth/domain/entities/user_entitie.dart';
+import 'package:blog/core/entities/user_entitie.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:blog/core/error/failurs.dart';
 
@@ -13,4 +13,6 @@ abstract interface class DomainAuthRepo {
     required String email,
     required String password,
   });
+
+  Future<Either<Failure,User>> getCurrentUser();
 }
