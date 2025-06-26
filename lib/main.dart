@@ -9,6 +9,8 @@ import 'package:blog/init_dependances.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/blog/ui/pages/blog_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
@@ -49,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, isLoggedIn) {
           if (isLoggedIn) {
-            return Scaffold(body: Center(child: Text("HomePage")));
+            return BlogPage();
           } else {
             return SigninPage();
           }

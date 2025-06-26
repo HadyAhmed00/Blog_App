@@ -5,6 +5,11 @@ class AppTheme {
   static final darkTheme = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     appBarTheme: AppBarTheme(backgroundColor: AppPallete.backgroundColor),
+    chipTheme: ChipThemeData().copyWith(
+      color: WidgetStatePropertyAll(AppPallete.backgroundColor),
+      side: BorderSide.none
+
+    ),
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(color: Colors.white),
       hintStyle: TextStyle(color: AppPallete.borderColor),
@@ -16,6 +21,7 @@ class AppTheme {
         borderSide: BorderSide(color: AppPallete.gradient2),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
+
     ),
   );
 }

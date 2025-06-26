@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:blog/core/common/cubits/user_login/user_login_cubit.dart';
 import 'package:blog/core/usecase/usecase.dart';
@@ -30,14 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _currentUser = currentUser,
        _userLoginCubits = userLoginCubit,
        super(AuthInitial()) {
-    on<AuthEvent>((_,emit)=> emit(AuthLoading()));
+
+    on<AuthEvent>((_, emit) => emit(AuthLoading()),);
     on<AuthSignUp>(_authSignUp);
     on<AuthSignIn>(_authSignIn);
     on<AuthIsUserLoggedIn>(_authIsUserLoggedIn);
   }
 
   void _authSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+
     final res = await _signupUsecase(
       SignupPrams(
         name: event.name,
@@ -49,7 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _authSignIn(AuthSignIn event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+
     final res = await _signinUsecase(
       SigninPrams(email: event.email, password: event.password),
     );
@@ -60,6 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthIsUserLoggedIn event,
     Emitter<AuthState> emit,
   ) async {
+
     final res = await _currentUser(Noparams());
     res.fold((l) => emit(AuthFailed(l.massage)), (r) => _emitSuccess(r,emit));
   }

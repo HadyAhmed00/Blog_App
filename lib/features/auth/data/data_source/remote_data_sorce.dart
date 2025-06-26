@@ -70,9 +70,12 @@ class AuthRemoteDataSourceSupabaseImpl implements AuthRemoteDataSource {
             .from("profiles")
             .select()
             .eq("id", currentUserSession!.user.id);
-        return UserModel.fromJson(
-          res.first,
-        ).copyWith(email: currentUserSession!.user.email);
+        print(res.first);
+        return UserModel(
+          id: res.first["id"],
+          name: res.first["name"],
+          email: "email",
+        );
       } else {
         return null;
       }
