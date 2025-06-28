@@ -34,11 +34,11 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
     required BlogMode blog,
   }) async {
     try {
-      await supabaseClient.storage.from('blog_images').upload(
+      await supabaseClient.storage.from('images_blog').upload(
             blog.id,
             image,
           );
-      return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
+      return supabaseClient.storage.from('images_blog').getPublicUrl(blog.id);
     } catch (e) {
       throw ServerException(e.toString());
     }
